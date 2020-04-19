@@ -67,21 +67,21 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * Raise Layer: Number keys, media, navigation
  *
  * ,-------------------------------------------.                              ,-------------------------------------------.
- * |  ESC   |   1  |  2   |  3   |  4   |  5   |                              |  6   |  7   |  8   |  9   |  0   |        |
- * |--------+------+------+------+------+------|                              |------+------+------+------+------+--------|
- * |        |      | Prev | Play | Next | VolUp|                              | Left | Down | Up   | Right|      |        |
- * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
- * |        |      |      |      | Mute | VolDn|      |      |  |      |      | MLeft| Mdown| MUp  |MRight|      |        |
+ * |  ESC  |   1   |  2   |  3   |  4   |  5   |                              |  6   |  7   |  8   |  9   |  0   |        |
+ * |-------+-------+------+------+------+------|                              |------+------+------+------+------+--------|
+ * | RGBmod|       | Sat+ | Hue+ | Bri+ | plain|                              | F1   |  F2  | F3   | F4   | F5   |  F6    |
+ * |-------+-------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
+ * |RGBmod-|RGBtogl| Sat- | Hue- | Bri- |breath|      |      |  |      |      | F7   |  F8  | F9   | F10  | F11  |  F12   |
  * `----------------------+------+------+------+------+------|  |------+------+------+------+------+----------------------'
  *                        |      |      |      |      |      |  |      |      |      |      |      |
  *                        |      |      |      |      |      |  |      |      |      |      |      |
  *                        `----------------------------------'  `----------------------------------'
  */
     [_RAISE] = LAYOUT(
-      _______, KC_1, 	  KC_2,    KC_3,    KC_4,    KC_5,                                        KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    _______,
-      _______, _______, KC_MPRV, KC_MPLY, KC_MNXT, KC_VOLU,                                     KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, _______, _______,
-      _______, _______, _______, _______, KC_MUTE, KC_VOLD, _______, _______, _______, _______, KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R, _______, _______,
-                                 _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
+      KC_ESC,   KC_1, 	 KC_2,    KC_3,    KC_4,    KC_5,                                        KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    ,
+      RGB_MOD,  ,        RGB_SAI, RGB_HUI, RGB_VAI, RGB_M_P,                                     KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,
+      RGB_RMOD, RGB_TOG, RGB_SAD, RGB_HUD, RGB_VAD, RGB_M_B, _______, _______, _______, _______, KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,
+                                  _______, _______, _______, _______, KC_DEL,  _______, _______, _______, _______, _______
     ),
 /*
  * Adjust Layer: Function keys, RGB
@@ -129,7 +129,7 @@ layer_state_t layer_state_set_user(layer_state_t state) {
     return update_tri_layer_state(state, _LOWER, _RAISE, _ADJUST);
 }
 
-ifdef OLED_DRIVER_ENABLE
+#ifdef OLED_DRIVER_ENABLE
 oled_rotation_t oled_init_user(oled_rotation_t rotation) {
 	return OLED_ROTATION_180;
 }
@@ -195,9 +195,9 @@ void oled_task_user(void) {
         render_kyria_logo();
     }
 }
-endif
+#endif
 
-ifdef ENCODER_ENABLE
+#ifdef ENCODER_ENABLE
 void encoder_update_user(uint8_t index, bool clockwise) {
     if (index == 0) {
         // Page Up and Page Down
@@ -216,4 +216,4 @@ void encoder_update_user(uint8_t index, bool clockwise) {
         }
     }
 }
-endif
+#endif
