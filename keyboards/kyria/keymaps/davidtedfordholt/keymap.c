@@ -58,10 +58,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *                        `----------------------------------'  `----------------------------------'
  */
     [_LOWER] = LAYOUT(
-      KC_ESC,  KC_EXLM, KC_AT,   KC_HASH, KC_DLR, KC_PERC,                                      _______, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, _______,
-      _______, _______, _______, _______, _______, _______,                                      KC_HOME, KC_LEFT, KC_UP,   KC_RGHT, KC_END,  _______,
+      KC_ESC,  KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC,                                     _______, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, _______,
+      _______, _______, _______, _______, _______, _______,                                     KC_HOME, KC_LEFT, KC_UP,   KC_RGHT, KC_END,  _______,
       _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, KC_PGDN, KC_DOWN, KC_PGUP, _______, _______,
-                                 _______, KC_DEL,  _______, _______, _______, _______, _______, _______, _______, _______
+                                 _______, KC_DEL,  KC_LSFT, KC_LALT, KC_LCTL, KC_ENT,  KC_SPC,  KC_SPC,  KC_ENT,  _______
     ),
 /*
  * Raise Layer: Number keys, media, navigation
@@ -129,7 +129,7 @@ layer_state_t layer_state_set_user(layer_state_t state) {
     return update_tri_layer_state(state, _LOWER, _RAISE, _ADJUST);
 }
 
-#ifdef OLED_DRIVER_ENABLE
+ifdef OLED_DRIVER_ENABLE
 oled_rotation_t oled_init_user(oled_rotation_t rotation) {
 	return OLED_ROTATION_180;
 }
@@ -195,25 +195,25 @@ void oled_task_user(void) {
         render_kyria_logo();
     }
 }
-#endif
+endif
 
-#ifdef ENCODER_ENABLE
+ifdef ENCODER_ENABLE
 void encoder_update_user(uint8_t index, bool clockwise) {
     if (index == 0) {
-        // Volume control
+        // Page Up and Page Down
         if (clockwise) {
-            tap_code(KC_VOLU);
+            tap_code(KC_PGUP);
         } else {
-            tap_code(KC_VOLD);
+            tap_code(KC_PGDN);
         }
     }
     else if (index == 1) {
-        // Page up/Page down
+        // Scrolling horizontally by word
         if (clockwise) {
-            tap_code(KC_PGDN);
+            tap_code16(C(KC_RGHT));
         } else {
-            tap_code(KC_PGUP);
+            tap_code16(C(KC_LEFT));
         }
     }
 }
-#endif
+endif
