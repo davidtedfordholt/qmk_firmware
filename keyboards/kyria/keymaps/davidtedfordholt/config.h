@@ -29,8 +29,8 @@
 #endif
 
 // EC11 encoders are located on both sides
-#define ENCODERS_PAD_A { B12 }
-#define ENCODERS_PAD_B { B13 }
+// #define ENCODERS_PAD_A { B12 }
+// #define ENCODERS_PAD_B { B13 }
 
 // EC11K encoders have a different resolution than other EC11 encoders.
 // When using the default resolution of 4, if you notice your encoder skipping

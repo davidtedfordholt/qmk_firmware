@@ -18,7 +18,29 @@
 enum layers {
     _QWERTY = 0,
     _LOWER,
-    _RAISE
+    _RAISE,
+    _ADJUST
+};
+
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+  switch (keycode) {
+    case R_PIPE:
+      if (record->event.pressed) {
+        // when keycode R_PIPE is pressed
+        SEND_STRING(" %>% \n");
+      } else {
+        // when keycode R_PIPE is released
+      }
+      break;
+    case R_STORE:
+      if (record->event.pressed) {
+        // when keycode R_STORE is pressed
+        SEND_STRING(" <- ");
+      } else {
+        // when keycode R_STORE is released
+      }
+  }
+  return true;
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -30,37 +52,37 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |--------+------+------+------+------+------|                              |------+------+------+------+------+--------|
  * |  ` ~   |   A  |   S  |   D  |   F  |   G  |                              |   H  |   J  |   K  |   L  | ;  : |  ' "   |
  * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
- * | SYMBOL |   Z  |   X  |   C  |   V  |   B  |      |      |  |      |      |   N  |   M  | ,  < | . >  | /  ? |  = +   |
+ * |  %>%   |   Z  |   X  |   C  |   V  |   B  |      |      |  |      |      |   N  |   M  | ,  < | . >  | /  ? |  = +   |
  * `----------------------+------+------+------+------+------|  |------+------+------+------+------+----------------------'
- *                        | Page | BkSp |LShift| LAlt | LCtrl|  | Enter| Space| Space| Enter|Scroll|
+ *                        | Page |  Ctl |Option| Shift|  Cmd |  | Enter| Space| BkSp |  Del |Scroll|
  *                        | Wheel|      |      |      |      |  |Number|Symbol|      |      | Wheel|
  *                        `----------------------------------'  `----------------------------------'
  */
     [_QWERTY] = LAYOUT(
-      KC_TAB,     KC_Q,  KC_W,  KC_E,  KC_R,  KC_T,                                     KC_Y,  KC_U,  KC_I,    KC_O,    KC_P,     KC_MINS,
-      KC_GRAVE,   KC_A,  KC_S,  KC_D,  KC_F,  KC_G,                                     KC_H,  KC_J,  KC_K,    KC_L,    KC_SCLN,  KC_QUOT,
-      LT(_LOWER), KC_Z,  KC_X,  KC_C,  KC_V,  KC_B,        ,        ,        ,        , KC_N,  KC_M,  KC_COMM, KC_DOT,  KC_SLSH,  KC_EQL,
-            ,  KC_BSPC, KC_LSFT, KC_LALT, KC_LCTL, LT(_RAISE, KC_ENT), LT(_LOWER, KC_SPC), KC_SPC, KC_ENT, 
+      KC_TAB,   KC_Q, KC_W, KC_E, KC_R, KC_T,                             KC_Y, KC_U, KC_I,    KC_O,   KC_P,    KC_MINS,
+      KC_GRAVE, KC_A, KC_S, KC_D, KC_F, KC_G,                             KC_H, KC_J, KC_K,    KC_L,   KC_SCLN, KC_QUOT,
+      R_PIPE,   KC_Z, KC_X, KC_C, KC_V, KC_B, KC_NO, KC_NO, KC_NO, KC_NO, KC_N, KC_M, KC_COMM, KC_DOT, KC_SLSH, KC_EQL,
+        KC_NO, KC_LCTL, KC_LGUI, KC_LSFT, KC_LALT, LT(_RAISE, KC_ENT), LT(_LOWER, KC_SPC), KC_BSPC, KC_DEL, KC_NO
     ),
 /*
  * Lower Layer: Symbols
  *
  * ,-------------------------------------------.                              ,-------------------------------------------.
- * |  ESC   |  !   |  @   |  #   |  $   |  %   |                              |  ^   |  &   |  *   |  (   |  )   |        |
+ * |  ESC   |  !   |  @   |  #   |  $   |  %   |                              |  ^   |  &   |  *   |  (   |  )   |   |    |
  * |--------+------+------+------+------+------|                              |------+------+------+------+------+--------|
- * |        |      |      |      | Find |      |                              | HOME | LEFT |  UP  | RIGHT|  END |        |
+ * |        |      |  {   |  }   |  [   |  ]   |                              | HOME | LEFT |  UP  | RIGHT|  END |   \    |
  * |--------+------+------+------+------+------+-------------.  ,-------------+------+------+------+------+------+--------|
- * |        |      |  Cut | Copy | Paste|      |      |      |  |      |      |      | PGDN | DOWN | PGUP |      |        |
+ * |        |      |      |      |      |      |      |      |  |      |      |      | PGDN | DOWN | PGUP |      |        |
  * `----------------------+------+------+------+------+------|  |------+------+------+------+------+----------------------'
  *                        |      |Delete|LShift| LAlt | LCtrl|  | Enter| Space| Space| Enter|      |
  *                        |      |      |      |      |      |  |Number|Symbol|      |      |      |
  *                        `----------------------------------'  `----------------------------------'
  */
     [_LOWER] = LAYOUT(
-      KC_ESC,  KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC,                                     _______, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, _______,
-      _______, _______, _______, _______, _______, _______,                                     KC_HOME, KC_LEFT, KC_UP,   KC_RGHT, KC_END,  _______,
-      _______, _______, _______, _______, _______, _______,        ,        ,        ,        , _______, KC_PGDN, KC_DOWN, KC_PGUP, _______, _______,
-                                        , KC_DEL,  KC_LSFT, KC_LALT, KC_LCTL, KC_ENT,  KC_SPC,  KC_SPC,  KC_ENT,  
+      KC_ESC,  KC_EXLM, KC_AT,      KC_HASH,    KC_DLR,  KC_PERC,                                     S(KC_6), KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, S(KC_BSLS),
+      KC_NO,   KC_NO,   S(KC_LBRC), S(KC_RBRC), KC_LBRC, KC_RBRC,                                     KC_HOME, KC_LEFT, KC_UP,   KC_RGHT, KC_END,  KC_BSLS,
+      R_STORE, KC_NO,   KC_NO,      KC_NO,      KC_NO,   KC_NO,   _______, _______, _______, _______, KC_NO,   KC_PGDN, KC_DOWN, KC_PGUP, KC_NO,   KC_EQL,
+                                    _______,    _______, _______, _______, _______, _______, _______, _______, _______, _______
     ),
 /*
  * Raise Layer: Number keys, media, navigation
@@ -77,11 +99,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *                        `----------------------------------'  `----------------------------------'
  */
     [_RAISE] = LAYOUT(
-      KC_ESC,   KC_1, 	 KC_2,    KC_3,    KC_4,    KC_5,                                        KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    ,
-      RGB_MOD,  ,        RGB_SAI, RGB_HUI, RGB_VAI, RGB_M_P,                                     KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,
-      RGB_RMOD, RGB_TOG, RGB_SAD, RGB_HUD, RGB_VAD, RGB_M_B,        ,        ,        ,        , KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,
-                                        , KC_DEL,  KC_LSFT, KC_LALT, KC_LCTL, KC_ENT,  KC_SPC,  KC_SPC,  KC_ENT,  
-    )
+      KC_ESC,  KC_1, 	KC_2,    KC_3,    KC_4,    KC_5,                                        KC_6,    KC_7,    KC_8,   KC_9,   KC_0,   KC_NO,
+      RGB_MOD, KC_NO,   RGB_SAI, RGB_HUI, RGB_VAI, RGB_M_P,                                     KC_F1,   KC_F2,   KC_F3,  KC_F4,  KC_F5,  KC_F6,
+      R_STORE, RGB_TOG, RGB_SAD, RGB_HUD, RGB_VAD, RGB_M_B, _______, _______, _______, _______, KC_F7,   KC_F8,   KC_F9,  KC_F10, KC_F11, KC_F12,
+                                 _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
+    ),
 // /*
 //  * Layer template
 //  *
@@ -96,12 +118,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 //  *                        |      |      |      |      |      |  |      |      |      |      |      |
 //  *                        `----------------------------------'  `----------------------------------'
 //  */
-//     [_LAYERINDEX] = LAYOUT(
-//       _______, _______, _______, _______, _______, _______,                                     _______, _______, _______, _______, _______, _______,
-//       _______, _______, _______, _______, _______, _______,                                     _______, _______, _______, _______, _______, _______,
-//       _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
-//                                  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
-//     ),
+     [_ADJUST] = LAYOUT(
+       _______, _______, _______, _______, _______, _______,                                     _______, _______, _______, _______, _______, _______,
+       _______, _______, _______, _______, _______, _______,                                     _______, _______, _______, _______, _______, _______,
+       _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
+                                  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
+     )
 };
 
 layer_state_t layer_state_set_user(layer_state_t state) {
